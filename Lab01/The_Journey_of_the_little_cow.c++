@@ -8,13 +8,12 @@ bool comparePromax(double a, double k, double ELP = 1e-9) {
 }
 
 bool compareNormal(double a, double k, double ELP = 1e-9) {
-    return (a >= k || fabs(a-k) <ELP);
+    return (a >= k || fabs(a-k)<ELP);
 }
 
 
 int main(){
     int seed,j,d = 0;
-    double ELP = 1e-9;
     double k = 0.0;
     cin>>j>>k;
     cin>>d;
@@ -34,14 +33,15 @@ int main(){
         }
         nutrient += cow;
 
-
-        if(compareNormal(cow,k)){
+        if(comparePromax(cow+uncle,k)){
+            promax++;
+        }
+       
+        else if(compareNormal(cow,k)){
             milk++;
         }
 
-        else if(comparePromax(cow+uncle,k)){
-            promax++;
-        }
+
         cow = 0.0;
     }
 
