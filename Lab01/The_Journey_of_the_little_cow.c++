@@ -1,39 +1,60 @@
 #include <iostream>
-#include <vector>
+#include <iomanip>
+#include <math.h>
 using namespace std;
 
-int compare(){
-    return 0;
+bool comparePromax(double a, double k, double ELP = 1e-9) {
+    return fabs(a - k) <= ELP;
 }
 
+bool compareNormal(double a, double k, double ELP = 1e-9) {
+    return (a >= k || fabs(a-k) <ELP);
+}
+
+
 int main(){
-    int j,d = 0;
-    double ELP = 1e-9L;
-    double k;
+    int seed,j,d = 0;
+    double ELP = 1e-9;
+    double k = 0.0;
     cin>>j>>k;
     cin>>d;
 
-    vector<int>seed(d);
-
-    double  p = pow(10,j);
+    double  p = pow(10.0,j);
     int milk = 0, promax = 0;
-    long double sum;
-    float uncle,cow = 0.0;
-
-    for(int i=0;i<d;i++){
-        cin >> seed[i];
-
-        long double;
+    double nutrient = 0.0;
+    double uncle = 0.0,cow = 0.0;
         
-    }
-
-
-
-    //check output
     for(int i=0;i<d;i++){
-        cout << seed[i];
+        cin >> seed;
+        uncle = p*seed;
+
+        for(int i=0;i<seed;i++){
+            cow += p;
+
+        }
+        nutrient += cow;
+
+
+        if(compareNormal(cow,k)){
+            milk++;
+        }
+
+        else if(comparePromax(cow+uncle,k)){
+            promax++;
+        }
+        cow = 0.0;
     }
+
+    cout<<"Milk : "<<milk<<endl;
+    cout<<"ProMax Milk : "<<promax<< endl;
+    cout<<"Nutrient : "<<setprecision(17)<<fixed<<showpoint<<nutrient<< endl;
+
+    // for(int i=0;i<d;i++){
+    //     cout << seed[i];
+    // }
+    // return 0;
+
+
     return 0;
-    
 
 }
