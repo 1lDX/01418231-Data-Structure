@@ -13,7 +13,7 @@ struct Robot{
     double atk;
     double def;
     int turn;
-    bool alive = 1;
+    bool alive = true;
 };
 
 struct Setting{
@@ -30,7 +30,7 @@ int main(){
     vector<Setting> TeamA(1), TeamB(1);
     vector<Robot> robotA(n), robotB(n);
 
-    for(int i=0;i<3;i++){
+    for(int i=0;i<1;i++){
         cin >> TeamA[i].robot>>TeamA[i].atkMultiply>>TeamA[i].defMultiply>>TeamA[i].powerUp;
     }
 
@@ -38,7 +38,7 @@ int main(){
         cin >> robotA[i].name>> robotA[i].health>>robotA[i].atk>>robotA[i].def>>robotA[i].turn;
     }
 
-    for(int i=0;i<3;i++){
+    for(int i=0;i<1;i++){
         cin >> TeamB[i].robot>>TeamB[i].atkMultiply>>TeamB[i].defMultiply>>TeamB[i].powerUp;
     }
 
@@ -65,35 +65,85 @@ int main(){
 int turn = 0;
 while(1){
         turn++;
-        for(int i=0;i<n;i++){
-            if(!robotA[i].alive || turn % robotA[i].turn != 0){
-                continue;
+        //TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+        // for(int i=0;i<n;i++){
+        //     if(!robotA[i].alive || turn % robotA[i].turn != 0){
+        //         continue;
+        //     } 
+        //     for(int j=0;j<n;j++){
+        //         if(robotB[j].alive){
+        //             double dmg = calDmg(robotA[i].atk, robotB[j].def);
+        //             robotB[j].health -= dmg;
+        //             if(robotB[j].health <= 0) robotB[j].alive = 0;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // for(int i=0;i<n;i++){
+        //     if(!robotB[i].alive || turn % robotB[i].turn != 0){
+        //         continue;
+        //     }
+        //     for(int j=0;j<n;j++){
+        //         if(robotA[j].alive){
+        //             double dmg = calDmg(robotB[i].atk, robotA[j].def);
+        //             robotA[j].health -= dmg;
+        //             if(robotA[j].health <= 0) robotA[j].alive = 0;
+        //             break;
+        //         }
+        //     }
+        // }
+        //TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+        for(int i = 0; i < n; i++){
+            if(turn % robotA[i].turn == 0 && robotA[i].alive){
+                for(int j = 0; j < n; j++){
+                    if(robotB[j].alive){
+                        double dmg = calDmg(robotA[i].atk, robotB[j].def);
+                        robotB[j].health -= dmg;
+                        if(robotB[j].health <= 0) robotB[j].alive = false;
+                        break;
+                    }
+                }
             }
 
-            for(int j=0;j<n;j++){
-                if(robotB[j].alive){
-                    double dmg = calDmg(robotA[i].atk, robotB[j].def);
-                    robotB[j].health -= dmg;
-                    if(robotB[j].health <= 0) robotB[j].alive = 0;
-                    break;
+            if(turn % robotB[i].turn == 0 && robotB[i].alive){
+                for(int j = 0; j < n; j++){
+                    if(robotA[j].alive){
+                        double dmg = calDmg(robotB[i].atk, robotA[j].def);
+                        robotA[j].health -= dmg;
+                        if(robotA[j].health <= 0) robotA[j].alive = false;
+                        break;
+                    }
                 }
             }
         }
 
-        for(int i=0;i<n;i++){
-            if(!robotB[i].alive || turn % robotB[i].turn != 0){
-                continue;
-            }
 
-            for(int j=0;j<n;j++){
-                if(robotA[j].alive){
-                    double dmg = calDmg(robotB[i].atk, robotA[j].def);
-                    robotA[j].health -= dmg;
-                    if(robotA[j].health <= 0) robotA[j].alive = 0;
-                    break;
-                }
+        for(int i = 0; i < n; i++){
+            if(turn % robotA[i].turn == 0 && robotA[i].alive){
+        for(int j = 0; j < n; j++){
+            if(robotB[j].alive){
+                double dmg = calDmg(robotA[i].atk, robotB[j].def);
+                robotB[j].health -= dmg;
+                if(robotB[j].health <= 0) robotB[j].alive = false;
+                break;
             }
         }
+    }
+
+    if(turn % robotB[i].turn == 0 && robotB[i].alive){
+        for(int j = 0; j < n; j++){
+            if(robotA[j].alive){
+                double dmg = calDmg(robotB[i].atk, robotA[j].def);
+                robotA[j].health -= dmg;
+                if(robotA[j].health <= 0) robotA[j].alive = false;
+                break;
+              }
+        }
+    }
+}
+
 
         int aliveA = 0, aliveB = 0;
         for(int i = 0; i < n; i++){
@@ -111,6 +161,7 @@ while(1){
                 if(aliveB > 1) cout << "s";
                 cout << " left.\n";
             }
+
             cout << "The battle took " << turn << " turn";
             if(turn > 1) cout << "s";
             cout << ".\n";
