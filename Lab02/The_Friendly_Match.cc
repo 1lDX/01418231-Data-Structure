@@ -8,13 +8,12 @@ int calDmg(double atk, double def){
 }
 
 struct Robot{
-    string name;
     double health;
     double atk;
     double def;
     int energy;
     int math = 0;
-    int ja;
+    int cc;
 };
 
 struct Setting{
@@ -27,11 +26,11 @@ struct Setting{
 void applyPowerUp(Setting& x, Setting& y, Robot& z, Robot& c, int xx, int yy){
     double stat = z.atk;
     double multiplier = c.def;
-    if(xx == x.robot && z.ja < x.powerUp){
+    if(xx == x.robot && z.cc < x.powerUp){
         stat *= x.atkMultiply;
     }
 
-    if(yy == y.robot && c.ja < y.powerUp){
+    if(yy == y.robot && c.cc < y.powerUp){
         multiplier *= y.defMultiply;
     }
 
@@ -42,11 +41,12 @@ void applyPowerUp(Setting& x, Setting& y, Robot& z, Robot& c, int xx, int yy){
         z.math +=1;
     }
     c.health -= calDmg(stat, multiplier);
-    z.ja +=1;
+    z.cc +=1;
 }
 
 int main(){
     int n;
+    string name;
     cin>>n;
 
     //Miena team
@@ -55,7 +55,7 @@ int main(){
 
     vector<Robot> robotA(n);
     for(int i = 0; i < n; i++){
-        cin>>robotA[i].health>>robotA[i].atk>>robotA[i].def>>robotA[i].energy;
+        cin>>name>>robotA[i].health>>robotA[i].atk>>robotA[i].def>>robotA[i].energy;
     }
     
 
@@ -65,7 +65,7 @@ int main(){
 
     vector<Robot> robotB(n);
     for (int i = 0; i < n; i++){
-        cin>>robotB[i].health>>robotB[i].atk>>robotB[i].def>>robotB[i].energy;
+        cin>>name>>robotB[i].health>>robotB[i].atk>>robotB[i].def>>robotB[i].energy;
     }
     
     int turn = 0;

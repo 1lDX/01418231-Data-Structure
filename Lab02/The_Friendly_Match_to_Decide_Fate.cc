@@ -12,7 +12,7 @@ struct Robot{
     double health;
     double atk;
     double def;
-    int turn;
+    int energy;
     bool alive = true;
 };
 
@@ -25,133 +25,63 @@ struct Setting{
 
 int main(){
     int n;
-    cin >> n;
+    cin>>n;
 
     vector<Setting> TeamA(1), TeamB(1);
     vector<Robot> robotA(n), robotB(n);
-
-    for(int i=0;i<1;i++){
-        cin >> TeamA[i].robot>>TeamA[i].atkMultiply>>TeamA[i].defMultiply>>TeamA[i].powerUp;
-    }
-
+        cin>>TeamA[0].robot>>TeamA[0].atkMultiply>>TeamA[0].defMultiply>>TeamA[0].powerUp;
     for(int i=0;i<n;i++){
-        cin >> robotA[i].name>> robotA[i].health>>robotA[i].atk>>robotA[i].def>>robotA[i].turn;
+        cin>>robotA[i].name>>robotA[i].health>>robotA[i].atk>>robotA[i].def>>robotA[i].energy;
     }
-
-    for(int i=0;i<1;i++){
-        cin >> TeamB[i].robot>>TeamB[i].atkMultiply>>TeamB[i].defMultiply>>TeamB[i].powerUp;
-    }
-
+        cin>>TeamB[0].robot>>TeamB[0].atkMultiply>>TeamB[0].defMultiply>>TeamB[0].powerUp;
     for(int i=0;i<n;i++){
-        cin >> robotB[i].name>> robotB[i].health>>robotB[i].atk>>robotB[i].def>>robotB[i].turn;
-    }
-
-    for(int i=0;i<1;i++){
-        int index = TeamA[i].robot;
-        if(TeamA[i].powerUp > 0 && index < robotA.size()) {
-            robotA[index].atk *= TeamA[i].atkMultiply;
-            robotA[index].def *= TeamA[i].defMultiply;
-        }
-    }
-
-    for(int i=0;i<1;i++){
-        int index = TeamA[i].robot;
-        if(TeamB[i].powerUp > 0 && index < robotB.size()) {
-            robotB[index].atk *= TeamB[i].atkMultiply;
-            robotB[index].def *= TeamB[i].defMultiply;
-        }
+        cin>>robotB[i].name>>robotB[i].health>>robotB[i].atk>>robotB[i].def>>robotB[i].energy;
     }
 
 int turn = 0;
-while(1){
-        turn++;
-        //TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-        // for(int i=0;i<n;i++){
-        //     if(!robotA[i].alive || turn % robotA[i].turn != 0){
-        //         continue;
-        //     } 
-        //     for(int j=0;j<n;j++){
-        //         if(robotB[j].alive){
-        //             double dmg = calDmg(robotA[i].atk, robotB[j].def);
-        //             robotB[j].health -= dmg;
-        //             if(robotB[j].health <= 0) robotB[j].alive = 0;
-        //             break;
-        //         }
-        //     }
-        // }
+int aliveA = 0, aliveB = 0;
 
-        // for(int i=0;i<n;i++){
-        //     if(!robotB[i].alive || turn % robotB[i].turn != 0){
-        //         continue;
-        //     }
-        //     for(int j=0;j<n;j++){
-        //         if(robotA[j].alive){
-        //             double dmg = calDmg(robotB[i].atk, robotA[j].def);
-        //             robotA[j].health -= dmg;
-        //             if(robotA[j].health <= 0) robotA[j].alive = 0;
-        //             break;
-        //         }
-        //     }
-        // }
-        //TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-
-        for(int i = 0; i < n; i++){
-            if(turn % robotA[i].turn == 0 && robotA[i].alive){
-                for(int j = 0; j < n; j++){
-                    if(robotB[j].alive){
-                        double dmg = calDmg(robotA[i].atk, robotB[j].def);
-                        robotB[j].health -= dmg;
-                        if(robotB[j].health <= 0) robotB[j].alive = false;
-                        break;
-                    }
-                }
-            }
-
-            if(turn % robotB[i].turn == 0 && robotB[i].alive){
-                for(int j = 0; j < n; j++){
-                    if(robotA[j].alive){
-                        double dmg = calDmg(robotB[i].atk, robotA[j].def);
-                        robotA[j].health -= dmg;
-                        if(robotA[j].health <= 0) robotA[j].alive = false;
-                        break;
-                    }
-                }
-            }
+    while(1){
+        double powerUpAtk = robotA[indexA].atk;
+        if (robotA[indexA].powerUp > 0) {
+            powerUpAtk *= TeamA[0].atkMultiply;
+            robotA[indexA].powerUp--;
+        }
+        // If Mena has enough energy for ultimate ability, double her attack
+        if (robotA[indexA].energy >= 5) {
+            powerUpAtk *= 2;  // Ultimate power
+            robotA[indexA].energy = 0;  // Reset energy after using ultimate
         }
 
-
-        for(int i = 0; i < n; i++){
-            if(turn % robotA[i].turn == 0 && robotA[i].alive){
-        for(int j = 0; j < n; j++){
-            if(robotB[j].alive){
-                double dmg = calDmg(robotA[i].atk, robotB[j].def);
-                robotB[j].health -= dmg;
-                if(robotB[j].health <= 0) robotB[j].alive = false;
-                break;
-            }
-        }
-    }
-
-    if(turn % robotB[i].turn == 0 && robotB[i].alive){
-        for(int j = 0; j < n; j++){
-            if(robotA[j].alive){
-                double dmg = calDmg(robotB[i].atk, robotA[j].def);
-                robotA[j].health -= dmg;
-                if(robotA[j].health <= 0) robotA[j].alive = false;
-                break;
-              }
-        }
-    }
-}
-
-
-        int aliveA = 0, aliveB = 0;
-        for(int i = 0; i < n; i++){
-            if(robotA[i].alive) aliveA++;
-            if(robotB[i].alive) aliveB++;
+        // Luna (Robot B) defense
+        double powerUpDef = robotB[indexB].def;
+        if (robotB[indexB].powerUp > 0) {
+            powerUpDef *= TeamB[0].defMultiply;
         }
 
-        if(aliveA == 0 || aliveB == 0){
+        // Calculate damage to Luna
+        double damageMena = calDmg(powerUpAtk, powerUpDef);
+        robotB[indexB].health -= damageMena;
+
+        if (robotB[indexB].health <= 0) {
+            indexB++;
+            aliveB--;
+        }
+
+        if (aliveB == 0) break;
+
+
+
+       
+
+
+
+
+        
+       
+    
+
+    if(aliveA == 0 || aliveB == 0){
             if(aliveA > 0){
                 cout <<"Miena is victorious with " << aliveA << " character";
                 if(aliveA > 1) cout << "s";
@@ -165,9 +95,7 @@ while(1){
             cout << "The battle took " << turn << " turn";
             if(turn > 1) cout << "s";
             cout << ".\n";
-            break;
-        }
     }
-
     return 0;
+    }
 }
